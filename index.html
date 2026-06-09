@@ -8,232 +8,245 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #060d1a;
-    --surface: #0d1f35;
-    --surface2: #132740;
-    --border: #1e3a5f;
-    --accent: #0ea5e9;
-    --green: #22c55e;
-    --green-bg: #042a12;
-    --red: #ef4444;
-    --red-bg: #2d0a0a;
-    --amber: #f59e0b;
-    --amber-bg: #2d1a00;
-    --text: #e0eaf8;
-    --muted: #5d7a9a;
-    --radius: 10px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 16px 48px;
-  }
-  .container { width: 100%; max-width: 700px; }
-  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px; }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-flag { font-size: 26px; line-height: 1; }
-  .logo-text { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
-  .exam-badge { font-family: 'DM Mono', monospace; font-size: 12px; padding: 4px 12px; border-radius: 99px; background: var(--surface2); color: var(--accent); border: 1px solid var(--border); }
-  .format-note { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .disclaimer { font-size: 12px; color: #7ba3cc; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--amber); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 16px; line-height: 1.5; }
-  .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
-  .stat-n { font-size: 22px; font-weight: 600; color: var(--text); font-family: 'DM Mono', monospace; }
-  .stat-l { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .pbar { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 16px; overflow: hidden; }
-  .pfill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
-  .cats { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
-  .cbt { font-size: 12px; font-family: 'DM Sans', sans-serif; padding: 5px 12px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .cbt:hover { border-color: var(--accent); color: var(--accent); }
-  .cbt.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
-  .qcard { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
-  .qmeta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .qtag { padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 500; letter-spacing: 0.4px; text-transform: uppercase; background: #0a2040; color: #60a5fa; border: 1px solid #1e3a6e; }
-  .qtxt { font-size: 16px; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
-  .opts { display: flex; flex-direction: column; gap: 8px; }
-  .opt { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--bg); text-align: left; display: flex; align-items: flex-start; gap: 12px; transition: all 0.15s; width: 100%; line-height: 1.5; }
-  .opt:hover:not(:disabled) { border-color: var(--accent); background: #091828; }
-  .opt.correct { background: var(--green-bg); border-color: var(--green); color: #86efac; }
-  .opt.wrong { background: var(--red-bg); border-color: var(--red); color: #fca5a5; }
-  .opt.reveal { background: var(--green-bg); border-color: var(--green); color: #86efac; opacity: 0.45; }
-  .opt:disabled { cursor: default; }
-  .opt-letter { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; min-width: 20px; padding-top: 1px; opacity: 0.6; }
-  .expl { display: none; margin-top: 16px; padding: 14px 16px; background: var(--surface2); border-radius: var(--radius); border-left: 3px solid var(--accent); font-size: 13px; color: #8ab4d4; line-height: 1.65; }
-  .expl.on { display: block; }
-  .expl strong { color: var(--text); font-weight: 500; }
-  .acts { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-  .btn { padding: 10px 20px; border-radius: var(--radius); font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border); background: var(--surface2); color: var(--text); }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn.primary:hover { background: #0284c7; }
-  .result { display: none; text-align: center; padding: 40px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
-  .result-score { font-size: 64px; font-weight: 600; font-family: 'DM Mono', monospace; line-height: 1; margin-bottom: 8px; }
-  .result-score.pass { color: var(--green); }
-  .result-score.fail { color: var(--red); }
-  .result-label { font-size: 18px; color: var(--text); margin-bottom: 6px; font-weight: 500; }
-  .result-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
-  .result-tip { padding: 12px 16px; border-radius: var(--radius); font-size: 13px; line-height: 1.6; text-align: left; margin-bottom: 24px; }
-  .result-tip.warn { background: var(--amber-bg); color: #fcd34d; border: 1px solid #78350f; }
-  .result-tip.good { background: var(--green-bg); color: #86efac; border: 1px solid #14532d; }
-  .result-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  @media (max-width: 480px) {
-    .stats { grid-template-columns: repeat(2,1fr); }
-    .stat-n { font-size: 18px; }
-    .qtxt { font-size: 15px; }
-    .result-score { font-size: 48px; }
-  }
+:root{--bg:#060d1a;--surface:#0d1f35;--surface2:#132740;--border:#1e3a5f;--accent:#0ea5e9;--green:#22c55e;--green-bg:#042a12;--red:#ef4444;--red-bg:#2d0a0a;--amber:#f59e0b;--amber-bg:#2d1a00;--text:#e0eaf8;--muted:#5d7a9a;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
+.container{width:100%;max-width:700px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-flag{font-size:26px;line-height:1}
+.logo-text{font-size:20px;font-weight:600;letter-spacing:-.3px}
+.exam-badge{font-family:'DM Mono',monospace;font-size:12px;padding:4px 12px;border-radius:99px;background:var(--surface2);color:var(--accent);border:1px solid var(--border)}
+.format-note{font-size:12px;color:var(--muted);margin-bottom:8px}
+.disclaimer{font-size:12px;color:#7ba3cc;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:var(--radius);padding:10px 12px;margin-bottom:16px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
+.stat-n{font-size:22px;font-weight:600;font-family:'DM Mono',monospace}
+.stat-l{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.pbar{height:3px;background:var(--surface2);border-radius:2px;margin-bottom:16px;overflow:hidden}
+.pfill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:0}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.cbt{font-size:12px;font-family:'DM Sans',sans-serif;padding:5px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.cbt:hover{border-color:var(--accent);color:var(--accent)}
+.cbt.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px}
+.qmeta{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.qtag{padding:2px 8px;border-radius:99px;font-size:10px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;background:#0a2040;color:#60a5fa;border:1px solid #1e3a6e}
+.qtxt{font-size:16px;line-height:1.6;margin-bottom:20px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);text-align:left;display:flex;align-items:flex-start;gap:12px;transition:all .15s;width:100%;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--accent);background:#091828}
+.opt.correct{background:var(--green-bg);border-color:var(--green);color:#86efac}
+.opt.wrong{background:var(--red-bg);border-color:var(--red);color:#fca5a5}
+.opt.reveal{background:var(--green-bg);border-color:var(--green);color:#86efac;opacity:.45}
+.opt:disabled{cursor:default}
+.opt-letter{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;min-width:20px;padding-top:1px;opacity:.6}
+.expl{display:none;margin-top:16px;padding:14px 16px;background:var(--surface2);border-radius:var(--radius);border-left:3px solid var(--accent);font-size:13px;color:#8ab4d4;line-height:1.65}
+.expl.on{display:block}
+.expl strong{color:var(--text);font-weight:500}
+.acts{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{padding:10px 20px;border-radius:var(--radius);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--surface2);color:var(--text)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#0284c7}
+.result{display:none;text-align:center;padding:40px 24px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+.result-score{font-size:64px;font-weight:600;font-family:'DM Mono',monospace;line-height:1;margin-bottom:8px}
+.result-score.pass{color:var(--green)}
+.result-score.fail{color:var(--red)}
+.result-label{font-size:18px;margin-bottom:6px;font-weight:500}
+.result-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.result-tip{padding:12px 16px;border-radius:var(--radius);font-size:13px;line-height:1.6;text-align:left;margin-bottom:24px}
+.result-tip.warn{background:var(--amber-bg);color:#fcd34d;border:1px solid #78350f}
+.result-tip.good{background:var(--green-bg);color:#86efac;border:1px solid #14532d}
+.result-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+@media(max-width:480px){.stats{grid-template-columns:repeat(2,1fr)}.stat-n{font-size:18px}.qtxt{font-size:15px}.result-score{font-size:48px}}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <div class="logo">
-      <span class="logo-flag">⚓</span>
-      <span class="logo-text">Simulado Arrais Amador</span>
-    </div>
-    <span class="exam-badge">Marinha do Brasil</span>
-  </div>
-  <div class="format-note">Prova oficial: 40 questões · mínimo 20 acertos (50%) para aprovação · 2 horas</div>
-  <div class="disclaimer">⚠️ Material de estudo. Verifique sempre o conteúdo atualizado nas normas oficiais da Marinha do Brasil (NORMAM, RIPEAM, R-LESTA) antes da prova real.</div>
+<div class="header">
+  <div class="logo"><span class="logo-flag">⚓</span><span class="logo-text">Simulado Arrais Amador</span></div>
+  <span class="exam-badge">Marinha do Brasil</span>
+</div>
+<div class="format-note">Prova real: 40 questões · mínimo 20 acertos (50%) · 2 horas · banco com 90+ questões embaralhadas</div>
+<div class="disclaimer">⚠️ Material de estudo baseado em simulados oficiais. Verifique sempre as normas atualizadas da Marinha do Brasil (NORMAM-03, RIPEAM-72, R-LESTA) antes da prova.</div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-n" id="sd">0</div><div class="stat-l">Respondidas</div></div>
-    <div class="stat"><div class="stat-n" id="sc">0</div><div class="stat-l">Corretas</div></div>
-    <div class="stat"><div class="stat-n" id="sw">0</div><div class="stat-l">Erradas</div></div>
-    <div class="stat"><div class="stat-n" id="sp">—</div><div class="stat-l">Aproveitamento</div></div>
-  </div>
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="sd">0</div><div class="stat-l">Respondidas</div></div>
+  <div class="stat"><div class="stat-n" id="sc">0</div><div class="stat-l">Corretas</div></div>
+  <div class="stat"><div class="stat-n" id="sw">0</div><div class="stat-l">Erradas</div></div>
+  <div class="stat"><div class="stat-n" id="sp">—</div><div class="stat-l">Aproveitamento</div></div>
+</div>
 
-  <div class="pbar"><div class="pfill" id="pf"></div></div>
-  <div class="cats" id="cbar"></div>
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+<div class="cats" id="cbar"></div>
 
-  <div id="qa">
-    <div class="qcard">
-      <div class="qmeta" id="qm"></div>
-      <div class="qtxt" id="qt"></div>
-      <div class="opts" id="op"></div>
-      <div class="expl" id="ex"></div>
-      <div class="acts" id="ac"></div>
-    </div>
+<div id="qa">
+  <div class="qcard">
+    <div class="qmeta" id="qm"></div>
+    <div class="qtxt" id="qt"></div>
+    <div class="opts" id="op"></div>
+    <div class="expl" id="ex"></div>
+    <div class="acts" id="ac"></div>
   </div>
+</div>
 
-  <div class="result" id="rs">
-    <div class="result-score" id="rsc"></div>
-    <div class="result-label" id="rl"></div>
-    <div class="result-sub" id="rp"></div>
-    <div class="result-tip" id="rt" style="display:none"></div>
-    <div class="result-tip good" id="rb" style="display:none"></div>
-    <div class="result-btns">
-      <button class="btn primary" onclick="restart()">Tentar novamente</button>
-      <button class="btn" onclick="window.open('https://www.marinha.mil.br','_blank')">Marinha do Brasil ↗</button>
-    </div>
+<div class="result" id="rs">
+  <div class="result-score" id="rsc"></div>
+  <div class="result-label" id="rl"></div>
+  <div class="result-sub" id="rp"></div>
+  <div class="result-tip" id="rt" style="display:none"></div>
+  <div class="result-tip good" id="rb" style="display:none"></div>
+  <div class="result-btns">
+    <button class="btn primary" onclick="restart()">Novo simulado</button>
+    <button class="btn" onclick="window.open('https://www.marinha.mil.br','_blank')">Marinha do Brasil ↗</button>
   </div>
+</div>
 </div>
 
 <script>
 var Q=[
-// RIPEAM
-{c:"RIPEAM",q:"Qual a finalidade do RIPEAM?",o:["Regulamentar a pesca artesanal no Brasil","Evitar o abalroamento no mar por meio de regras de navegação, luzes, marcas e sinais sonoros","Definir as normas de segurança em portos brasileiros","Estabelecer as taxas de atracação em marinas"],a:1,e:"O <strong>RIPEAM (Regulamento Internacional para Evitar Abalroamento no Mar)</strong> estabelece as regras de trânsito entre embarcações, incluindo luzes, marcas e sinais sonoros, com o objetivo de evitar colisões no mar."},
-{c:"RIPEAM",q:"Na situação de 'roda a roda' (proa com proa), o que as duas embarcações devem fazer?",o:["Ambas guinam para bombordo","Ambas guinam para boreste","A de maior porte tem prioridade de passagem","A embarcação a motor cede para a vela"],a:1,e:"Na situação de <strong>roda a roda</strong>, quando duas embarcações se aproximam de frente, ambas devem guinar para <strong>boreste (direita)</strong>, passando cada uma pelo lado de bombordo da outra."},
-{c:"RIPEAM",q:"Na situação de rumos cruzados, qual embarcação tem preferência de passagem?",o:["A embarcação de maior porte","A que avista a outra pelo seu boreste (vê a luz vermelha)","A que avista a outra pelo seu bombordo (vê a luz verde)","A embarcação que navega a favor do vento"],a:2,e:"Na situação de <strong>rumos cruzados</strong>, tem preferência a embarcação que avista a outra pelo seu <strong>bombordo</strong>, ou seja, a que enxerga a <strong>luz verde</strong> da outra. A que avista pelo boreste (vê a luz vermelha) deve manobrar."},
-{c:"RIPEAM",q:"Uma embarcação alcançando outra tem prioridade de passagem?",o:["Sim, quem alcança sempre tem prioridade","Não — a embarcação alcançadora deve manobrar e passar pela outra com segurança","Sim, mas apenas em canais estreitos","Depende do porte das embarcações"],a:1,e:"A <strong>embarcação alcançadora não tem prioridade</strong>. Ela deve manobrar, podendo passar pela proa ou pela popa da alcançada, garantindo sempre uma distância segura. A embarcação alcançada mantém seu rumo e velocidade."},
-{c:"RIPEAM",q:"Qual sinal sonoro indica 'Estou guinando para boreste'?",o:["Dois apitos curtos","Três apitos curtos","Um apito curto","Um apito longo"],a:2,e:"<strong>Um apito curto</strong> significa 'Estou guinando para boreste'. Dois apitos curtos significam 'Estou guinando para bombordo'. Três apitos curtos indicam 'Estou operando máquinas a ré'."},
-{c:"RIPEAM",q:"Em quais situações são usados os sinais sonoros segundo o RIPEAM?",o:["Manobra, advertência e em baixa visibilidade","Manobra, risco de colisão e em baixa visibilidade","Apenas em situações de perigo","Apenas em portos e canais estreitos"],a:1,e:"Segundo o RIPEAM, os sinais sonoros são usados em três situações: <strong>manobra</strong> (indicar a manobra executada), <strong>risco de colisão</strong> (advertência) e em <strong>baixa visibilidade</strong> (nevoeiro, neblina, etc.)."},
-{c:"RIPEAM",q:"Qual o arco de visibilidade de uma luz de mastro (branca)?",o:["112,5° de cada bordo (225° ao todo)","180° à vante","360° ao redor do horizonte","90° de cada bordo"],a:0,e:"A <strong>luz de mastro é branca</strong> e visível em um arco de <strong>112,5° de cada bordo</strong>, totalizando <strong>225°</strong> à frente da embarcação. As luzes de bordo (verde e vermelha) cobrem cada uma 112,5°."},
-{c:"RIPEAM",q:"Qual a luz exibida a ré de uma embarcação em movimento?",o:["Luz branca de 360°","Luz amarela de 135°","Luz branca de alcançado, visível em 135° a ré","Luz vermelha de 112,5°"],a:2,e:"A <strong>luz de alcançado</strong>, exibida a ré, é <strong>branca</strong> e visível em um arco de <strong>135°</strong> — 67,5° de cada bordo em relação à popa."},
-{c:"RIPEAM",q:"Uma embarcação à vela, de noite, deve exibir:",o:["Apenas uma luz branca de 360°","Luzes de bordo (verde a boreste e vermelha a bombordo) e luz de alcançado","Somente luz vermelha piscante","Luz de mastro branca + luzes de bordo"],a:1,e:"Uma <strong>embarcação à vela</strong> em movimento deve exibir <strong>luzes de bordo</strong> (verde a boreste, vermelha a bombordo) e a <strong>luz de alcançado</strong> (branca, 135° a ré). Embarcações a vela não usam luz de mastro."},
-{c:"RIPEAM",q:"Três luzes encarnadas (vermelhas) na vertical indicam qual situação?",o:["Embarcação em perigo","Embarcação não manobreira","Embarcação aground (encalhada)","Embarcação de pesca arrastando redes"],a:2,e:"<strong>Três luzes vermelhas na vertical</strong> indicam uma embarcação <strong>encalhada (aground)</strong>. Não manobreira são duas bolas pretas ou duas luzes vermelhas. Em perigo, usa-se sinal diferente."},
+// ── RIPEAM ──────────────────────────────────────────────────────────────────
+{c:"RIPEAM",q:"Qual a finalidade do RIPEAM?",o:["Regulamentar a pesca artesanal","Evitar o abalroamento no mar por meio de regras de navegação, luzes, marcas e sinais sonoros","Normatizar taxas de atracação em portos brasileiros","Estabelecer as regras de segurança em estaleiros"],a:1,e:"O <strong>RIPEAM</strong> (Regulamento Internacional para Evitar Abalroamento no Mar) define as regras de trânsito entre embarcações — luzes, marcas e sinais sonoros — com o objetivo de evitar colisões no mar."},
+{c:"RIPEAM",q:"As regras do RIPEAM se aplicam a:",o:["Apenas embarcações miúdas","Apenas embarcações de alto mar","Todas as embarcações em mar aberto e em todas as águas a este ligadas, navegáveis por navios de alto mar","Apenas embarcações de esporte e recreio"],a:2,e:"O RIPEAM aplica-se a <strong>todas as embarcações em mar aberto</strong> e em todas as águas navegáveis a ele ligadas — independentemente do tamanho ou tipo da embarcação."},
+{c:"RIPEAM",q:"Na situação de 'roda a roda' (proa com proa), o que as duas embarcações devem fazer?",o:["Ambas guinam para bombordo","Ambas guinam para boreste","A de maior porte tem prioridade","A embarcação a motor cede para a vela"],a:1,e:"Na situação <strong>roda a roda</strong>, ambas as embarcações devem guinar para <strong>boreste</strong>, passando pelo lado de bombordo da outra."},
+{c:"RIPEAM",q:"Na situação de rumos cruzados, qual embarcação tem preferência de passagem?",o:["A de maior porte","A que avista a outra pelo seu boreste (vê luz vermelha)","A que avista a outra pelo seu bombordo (vê luz verde)","A que navega a favor do vento"],a:2,e:"Na situação de <strong>rumos cruzados</strong>, tem prioridade a que avista a outra pelo <strong>bombordo</strong> — ou seja, quem enxerga a <strong>luz verde</strong> da outra. A que avista pelo boreste (vê a vermelha) deve manobrar."},
+{c:"RIPEAM",q:"Uma embarcação alcançando outra tem prioridade de passagem?",o:["Sim, quem alcança sempre tem prioridade","Não — a alcançadora deve manobrar e passar com segurança","Sim, mas apenas em canais estreitos","Depende do porte"],a:1,e:"A <strong>embarcação alcançadora não tem prioridade</strong>. Ela deve manobrar para passar pela proa ou popa da alcançada mantendo distância segura."},
+{c:"RIPEAM",q:"Qual sinal sonoro indica 'Estou guinando para boreste'?",o:["Dois apitos curtos","Três apitos curtos","Um apito curto","Um apito longo"],a:2,e:"<strong>Um apito curto</strong> = guinar para boreste. Dois apitos curtos = guinar para bombordo. Três apitos curtos = máquinas a ré."},
+{c:"RIPEAM",q:"Dois apitos curtos significam:",o:["Estou guinando para boreste","Estou guinando para bombordo","Estou operando máquinas a ré","Estou fundeando"],a:1,e:"<strong>Dois apitos curtos</strong> indicam 'Estou guinando para <strong>bombordo</strong>'."},
+{c:"RIPEAM",q:"Em quais situações são usados os sinais sonoros segundo o RIPEAM?",o:["Manobra, advertência e baixa visibilidade","Manobra, risco de colisão e baixa visibilidade","Apenas em situações de perigo","Apenas em portos e canais"],a:1,e:"Os sinais sonoros são usados em três situações: <strong>manobra, risco de colisão</strong> (advertência) e em <strong>baixa visibilidade</strong> (nevoeiro, neblina etc.)."},
+{c:"RIPEAM",q:"Qual o arco de visibilidade de uma luz de mastro (branca)?",o:["112,5° de cada bordo (225° ao total)","180° à vante","360° ao redor do horizonte","90° de cada bordo"],a:0,e:"A luz de mastro é <strong>branca</strong>, visível em <strong>112,5° de cada bordo</strong> (total de 225°) à frente da embarcação."},
+{c:"RIPEAM",q:"A luz de alcançado (ré) tem qual cor e arco de visibilidade?",o:["Verde, 112,5°","Branca, 360°","Branca, 135°","Amarela, 135°"],a:2,e:"A <strong>luz de alcançado</strong> é <strong>branca</strong>, visível em <strong>135°</strong> a ré (67,5° de cada bordo em relação à popa)."},
+{c:"RIPEAM",q:"Uma embarcação à vela, à noite, deve exibir:",o:["Apenas uma luz branca de 360°","Luzes de bordo (verde a BE e vermelha a BB) e luz de alcançado","Somente luz vermelha piscante","Luz de mastro + luzes de bordo"],a:1,e:"Embarcação à vela em movimento: <strong>luzes de bordo</strong> (verde a boreste, vermelha a bombordo) + <strong>luz de alcançado</strong> branca a ré. Não usa luz de mastro."},
+{c:"RIPEAM",q:"Três luzes vermelhas na vertical indicam:",o:["Embarcação em perigo","Embarcação sem governo","Embarcação encalhada (aground)","Embarcação de pesca arrastando redes"],a:2,e:"<strong>Três luzes vermelhas na vertical</strong> = embarcação <strong>encalhada (aground)</strong>. Sem governo = duas luzes vermelhas. Perigo = artefato pirotécnico."},
+{c:"RIPEAM",q:"Duas luzes vermelhas circulares na vertical indicam:",o:["Embarcação encalhada","Embarcação sem governo","Embarcação fundeada","Embarcação com manobra restrita"],a:1,e:"<strong>Duas luzes vermelhas</strong> na vertical indicam embarcação <strong>sem governo</strong> — temporariamente incapaz de manobrar."},
+{c:"RIPEAM",q:"De noite, uma forte luz encarnada vinda de uma embarcação (artefato pirotécnico) indica:",o:["Embarcação com manobra restrita pelo calado","Embarcação sem governo temporariamente","Embarcação com manobra restrita","Embarcação em perigo, necessitando auxílio"],a:3,e:"Uma <strong>luz encarnada (sinalizador pirotécnico)</strong> emitida por uma embarcação é sinal de <strong>socorro</strong> — a embarcação está em perigo e precisa de auxílio."},
+{c:"RIPEAM",q:"As marcas (balões, cones etc.) utilizadas durante o dia pelas embarcações são da cor:",o:["Preta","Branca","Vermelha","Amarela"],a:0,e:"Segundo o RIPEAM, todas as marcas diurnas (cones, cilindros, bolas, losangos) são da cor <strong>preta</strong>."},
+{c:"RIPEAM",q:"O termo 'em movimento' se aplica a embarcações que:",o:["Estão encalhadas","Não se encontram fundeadas, amarradas à terra ou encalhadas","Estão atracadas","Estão fundeadas"],a:1,e:"Uma embarcação está <strong>'em movimento'</strong> quando <strong>não está fundeada, amarrada à terra ou encalhada</strong> — mesmo que parada na água sem propulsão."},
+{c:"RIPEAM",q:"Assinale a alternativa INCORRETA sobre o RIPEAM:",o:["Um apito curto: ESTOU GUINANDO PARA BORESTE","Dois apitos curtos: ESTOU GUINANDO PARA BOMBORDO","Quando duas embarcações em rumos opostos, ambas guinam para boreste","Quando duas embarcações em rumos opostos, ambas guinam para bombordo"],a:3,e:"A alternativa incorreta é que ambas guinam para <strong>bombordo</strong>. Na situação roda a roda, ambas devem guinar para <strong>boreste</strong>."},
 
-// BALIZAMENTO
-{c:"Balizamento",q:"No sistema de balizamento IALA região 'B' (usado no Brasil), qual a cor da bóia lateral de boreste (lado direito de quem entra no porto)?",o:["Verde","Amarela","Encarnada (vermelha)","Branca"],a:2,e:"No sistema <strong>IALA região 'B'</strong>, adotado no Brasil, a bóia lateral do lado de <strong>boreste de quem entra</strong> no porto é <strong>encarnada (vermelha)</strong>. A de bombordo é verde."},
-{c:"Balizamento",q:"A bóia de bombordo emite luz de qual cor à noite?",o:["Vermelha","Branca","Amarela","Verde"],a:3,e:"No Brasil (IALA região B), a bóia de <strong>bombordo</strong> é verde e emite luz <strong>verde</strong> à noite. A bóia de boreste é vermelha e emite luz vermelha."},
-{c:"Balizamento",q:"Como é feita a identificação do balizamento à noite?",o:["Pelo tamanho e formato da bóia","Pelas cores das luzes e número de repetições","Apenas pelo número marcado na bóia","Pelo brilho da luz"],a:1,e:"À noite, o balizamento é identificado pelas <strong>cores das luzes e pelo número de repetições</strong> (ritmo luminoso) — se a luz pisca uma vez, duas vezes, é fixa, etc."},
-{c:"Balizamento",q:"A bóia cega:",o:["Emite luz branca","Emite luz intermitente amarela","Não emite luz alguma","Emite som mas não emite luz"],a:2,e:"A <strong>bóia cega</strong> é aquela que <strong>não emite luz alguma</strong>. É usada em locais de menor importância ou como referência diurna apenas."},
-{c:"Balizamento",q:"O sinal cardinal Norte indica:",o:["Que há perigo ao norte da bóia","Que as águas mais seguras estão ao norte da marca","Que o canal principal está a sul","Que há menos de 5 metros de profundidade"],a:1,e:"Os <strong>sinais cardinais</strong> indicam que as águas mais seguras estão no quadrante designado. O sinal cardinal <strong>Norte</strong> indica que as águas seguras estão ao <strong>norte</strong> da marca."},
-{c:"Balizamento",q:"Qual dispositivo nas bóias emite sinal na tela do radar facilitando sua identificação?",o:["Navcan","Interscan","Racon","Delta"],a:2,e:"O <strong>Racon</strong> (Radar Beacon) é um transponder que, ao receber um sinal de radar, emite uma resposta que aparece na tela do radar do navegante, facilitando a identificação da bóia."},
-{c:"Balizamento",q:"Qual o único caso em que se usa balizamento dobrado (dois sinais iguais)?",o:["Em canais com muita corrente","Em perigo isolado não registrado na carta náutica","Na entrada de portos importantes","Em locais de ancoragem obrigatória"],a:1,e:"O <strong>balizamento dobrado</strong> (dois sinais iguais) é usado exclusivamente para indicar um <strong>perigo isolado não registrado na carta náutica</strong>, alertando o navegante para um obstáculo desconhecido."},
+// ── BALIZAMENTO ──────────────────────────────────────────────────────────────
+{c:"Balizamento",q:"No sistema IALA região 'B' (Brasil), qual a cor da bóia lateral de boreste de quem entra no porto?",o:["Verde","Amarela","Encarnada (vermelha)","Branca"],a:2,e:"No sistema <strong>IALA região B</strong> (Brasil), a bóia de <strong>boreste (direita) de quem entra</strong> é <strong>encarnada (vermelha)</strong>. A de bombordo é verde."},
+{c:"Balizamento",q:"A bóia de bombordo emite luz de qual cor à noite?",o:["Vermelha","Branca","Amarela","Verde"],a:3,e:"A bóia de <strong>bombordo</strong> (lado esquerdo ao entrar) emite luz <strong>verde</strong> à noite."},
+{c:"Balizamento",q:"Como é feita a identificação do balizamento à noite?",o:["Pelo tamanho da bóia","Pelas cores das luzes e número de repetições","Apenas pelo número na bóia","Pelo brilho da luz"],a:1,e:"À noite, o balizamento é identificado pelas <strong>cores das luzes e pelo número de repetições</strong> (ritmo luminoso)."},
+{c:"Balizamento",q:"A bóia cega:",o:["Emite luz branca","Emite luz intermitente amarela","Não emite luz alguma","Emite som mas não luz"],a:2,e:"A <strong>bóia cega</strong> é aquela que <strong>não emite luz</strong> alguma — é referência apenas diurna."},
+{c:"Balizamento",q:"A identificação dos sinais de balizamento durante o dia é feita por:",o:["Somente forma e cor","Marca de tope, cor e tamanho","Marca de tope, forma e cor","Somente marca de tope e cor"],a:2,e:"Durante o dia, os sinais de balizamento são identificados pela <strong>marca de tope, forma e cor</strong>."},
+{c:"Balizamento",q:"O sinal cardinal Norte indica:",o:["Que há perigo ao norte","As águas mais seguras estão ao norte da marca","O canal principal está a sul","Profundidade inferior a 5 metros"],a:1,e:"O sinal cardinal <strong>Norte</strong> indica que as <strong>águas mais seguras estão ao norte</strong> da marca."},
+{c:"Balizamento",q:"Os sinais cardinais NÃO são usados para:",o:["Indicar que as águas mais profundas estão no quadrante designado","Indicar o quadrante seguro para navegar","Chamar atenção de um ponto notável","Delimitar área em que o navegador deve se limitar a passar"],a:3,e:"Sinais cardinais indicam quadrante seguro, águas profundas e pontos notáveis — mas <strong>não são usados para delimitar áreas de navegação</strong>."},
+{c:"Balizamento",q:"Qual dispositivo nas bóias emite sinal na tela do radar?",o:["Navcan","Interscan","Racon","Delta"],a:2,e:"O <strong>Racon</strong> (Radar Beacon) responde a pulsos de radar, exibindo um sinal na tela do radar do navegante."},
+{c:"Balizamento",q:"Qual o único caso em que se usa balizamento dobrado (dois sinais iguais)?",o:["Em canais com muita corrente","Perigo isolado não registrado na carta náutica","Entrada de portos importantes","Locais de ancoragem obrigatória"],a:1,e:"<strong>Balizamento dobrado</strong> indica exclusivamente um <strong>perigo isolado não registrado na carta náutica</strong>."},
+{c:"Balizamento",q:"O balizamento que indica águas seguras possui as cores:",o:["Branca e encarnada em faixas verticais","Preta e encarnada","Branca e preta","Encarnada e amarela"],a:0,e:"O balizamento de <strong>águas seguras</strong> tem cores <strong>branca e encarnada em faixas verticais</strong>."},
+{c:"Balizamento",q:"O balizamento de perigo isolado possui as cores:",o:["Branca e encarnada","Preta e encarnada em faixas horizontais","Branca e preta","Encarnada e amarela"],a:1,e:"O balizamento de <strong>perigo isolado</strong> tem cores <strong>preta e encarnada (vermelha) em faixas horizontais</strong>."},
+{c:"Balizamento",q:"O balizamento cardinal tem as cores:",o:["Branca e encarnada","Verde e encarnada","Amarela e preta","Branca e preta"],a:2,e:"Os <strong>sinais cardinais</strong> têm as cores <strong>amarela e preta</strong>."},
+{c:"Balizamento",q:"À noite, a cor das luzes dos sinais cardinais, perigo isolado e águas seguras é:",o:["Amarela","Verde","Encarnada","Branca"],a:3,e:"Os sinais cardinais, de perigo isolado e de águas seguras emitem <strong>luz branca</strong> à noite. A diferença é no ritmo (número de piscadas)."},
+{c:"Balizamento",q:"Uma bóia com cores brancas e encarnadas em faixas verticais indica:",o:["Canal preferencial","Perigo isolado","Águas seguras","Limite lateral de canal"],a:2,e:"Faixas verticais brancas e encarnadas = <strong>águas seguras</strong> (safe water mark)."},
+{c:"Balizamento",q:"As bóias do balizamento podem ser:",o:["Cegas ou luminosas","Azuis ou brancas","Apenas esféricas","Sempre com marca de tope"],a:0,e:"As bóias podem ser <strong>cegas (sem luz)</strong> ou <strong>luminosas (com luz)</strong>."},
+{c:"Balizamento",q:"São sinais de balizamento, EXCETO:",o:["Sinais laterais e sinais especiais","Sinais de pontes e sinais de perigos","Sinais cardinais e sinais laterais","Sinais de perigo isolado e sinais cardinais"],a:1,e:"<strong>Sinais de pontes</strong> não são uma categoria oficial de balizamento marítimo. As categorias são: laterais, cardinais, perigo isolado, águas seguras, especiais e novos perigos."},
+{c:"Balizamento",q:"A numeração do balizamento de canal segue:",o:["Ordem crescente a partir da entrada do canal","Numeração decrescente a partir da entrada","Ordem determinada pelo porto","Ordem de acordo com o tipo"],a:0,e:"A numeração do balizamento de canal segue <strong>ordem crescente a partir da entrada do canal</strong>."},
 
-// MANOBRA
-{c:"Manobra",q:"Quando o navegante gira o leme de uma embarcação em movimento para boreste, a proa vai para:",o:["Bombordo","Boreste","Permanece em linha reta","Depende da velocidade"],a:1,e:"Ao girar o leme para <strong>boreste (direita)</strong>, a popa se desloca para boreste e a <strong>proa vira para boreste</strong>. O leme atua como uma alavanca: o sentido do leme é o mesmo para onde a proa vai."},
-{c:"Manobra",q:"Uma embarcação com um hélice de rotação horária (visão de popa), ao dar ré, tende a:",o:["Manter curso reto","Caçar a popa para boreste (direita)","Caçar a popa para bombordo (esquerda)","Girar em torno do próprio eixo"],a:1,e:"Um hélice com <strong>rotação horária</strong> (sentido anti-horário visto pela popa) ao dar ré tende a <strong>caçar a popa para boreste</strong> devido ao efeito de pá de remo. Isso é fundamental para manobras de atracação."},
-{c:"Manobra",q:"O que é 'boreste'?",o:["O lado esquerdo da embarcação olhando para a proa","O lado direito da embarcação olhando para a proa","A parte traseira da embarcação","A parte dianteira da embarcação"],a:1,e:"<strong>Boreste</strong> é o lado <strong>direito</strong> da embarcação quando se olha para a proa (frente). O lado esquerdo é chamado <strong>bombordo</strong>. Memorize: baBOrdo = Bombordo = esquerdo."},
-{c:"Manobra",q:"O que é 'proa'?",o:["A parte traseira da embarcação","A parte lateral da embarcação","A parte dianteira (frontal) da embarcação","O mastro principal"],a:2,e:"A <strong>proa</strong> é a parte <strong>dianteira (frontal)</strong> da embarcação. A parte traseira é chamada de <strong>popa</strong>."},
-{c:"Manobra",q:"Qual o efeito do leme quando a embarcação está parada?",o:["O leme funciona normalmente","O leme não tem efeito — é necessário ter movimento da embarcação","O leme funciona somente à ré","O leme é mais eficiente parado"],a:1,e:"O leme <strong>não tem efeito com a embarcação parada</strong>, pois ele atua desviando o fluxo de água que passa pela popa. Sem movimento, não há fluxo e o leme não produz força de governo."},
+// ── MANOBRA E NOMENCLATURA ────────────────────────────────────────────────────
+{c:"Manobra",q:"O que é 'boreste'?",o:["Lado esquerdo olhando para a proa","Lado direito olhando para a proa","Parte traseira da embarcação","Parte dianteira da embarcação"],a:1,e:"<strong>Boreste</strong> = lado <strong>direito</strong> da embarcação olhando para a proa. Bombordo = lado esquerdo. Memorize: bo<strong>MB</strong>ordo = esquerdo (como no sentido de leitura)."},
+{c:"Manobra",q:"O que é 'proa'?",o:["Parte traseira da embarcação","Parte lateral","Parte dianteira (frontal)","O mastro principal"],a:2,e:"<strong>Proa</strong> = parte <strong>dianteira (frontal)</strong> da embarcação. <strong>Popa</strong> = parte traseira."},
+{c:"Manobra",q:"O que é 'pontal'?",o:["Largura máxima da embarcação","Distância vertical entre a quilha e o convés","Comprimento total da embarcação","Distância da superfície até a quilha"],a:1,e:"<strong>Pontal</strong> é a distância vertical entre a <strong>quilha (fundo) e o convés</strong>. Não se altera com a carga — diferente do calado."},
+{c:"Manobra",q:"Qual medida da embarcação NÃO se altera quando a carga aumenta ou diminui?",o:["Pontal","Deslocamento","Estabilidade","Borda livre"],a:0,e:"O <strong>pontal</strong> é uma medida estrutural fixa da embarcação, não se altera com a variação da carga. Calado, deslocamento, borda livre e estabilidade variam com a carga."},
+{c:"Manobra",q:"As medidas lineares de uma embarcação são:",o:["Comprimento total, boca, pontal e contorno","Boca, calado, quilha e través","Boca, contorno, calado e proa","Comprimento total, boca, pontal e longarinas"],a:0,e:"As medidas lineares são: <strong>comprimento total, boca (largura máxima), pontal e calado</strong>. 'Contorno' não é medida padrão."},
+{c:"Manobra",q:"Quando o navegante gira o leme para boreste, a proa vai para:",o:["Bombordo","Boreste","Permanece reta","Depende da velocidade"],a:1,e:"Ao girar o leme para <strong>boreste</strong>, a popa se desloca para boreste e a <strong>proa vira para boreste</strong>. O leme age como uma alavanca: o leme e a proa vão para o mesmo lado."},
+{c:"Manobra",q:"Quando o navegante gira o leme para bombordo, a popa:",o:["Impulsiona para boreste","Impulsiona para bombordo","Permanece na mesma posição","Gira em torno do eixo vertical"],a:1,e:"Ao girar o leme para <strong>bombordo</strong>, a popa se desloca para <strong>bombordo</strong> e a proa vira para bombordo."},
+{c:"Manobra",q:"Um hélice de rotação anti-horária, em marcha avante, tende a fazer a embarcação guinar para:",o:["Bombordo lentamente","Boreste lentamente","Não tem influência","Boreste rapidamente"],a:1,e:"Um hélice com rotação <strong>anti-horária</strong> em marcha avante tende a guinar levemente para <strong>boreste</strong> — efeito de pá de remo."},
+{c:"Manobra",q:"O leme tem efeito quando a embarcação está parada?",o:["Sim, funciona normalmente","Não — é necessário movimento para o leme atuar","Sim, apenas à ré","Mais eficiente parado"],a:1,e:"O leme <strong>não tem efeito com a embarcação parada</strong>, pois atua desviando o fluxo de água. Sem movimento, não há fluxo."},
+{c:"Manobra",q:"Ao manobrar para pegar uma boia de amarração, a embarcação deve se aproximar:",o:["Em ângulo de 90° pela proa","Pelo través, cortando o vento","Desde a barlavento, aproximando-se pela proa ou pelo bordo, reduzindo a velocidade","Em alta velocidade para ter maior controle"],a:2,e:"A aproximação correta para pegar uma boia é feita desde <strong>barlavento</strong> (contra o vento), pela proa ou bordo, <strong>reduzindo a velocidade</strong> gradualmente até parar ao lado da boia."},
+{c:"Manobra",q:"Se um barco está 'abicado', ele está com:",o:["Muito peso na quilha e leve na proa","Muito peso a meia nau","Muito peso na proa e pouco na popa","Muito peso na popa e pouco na proa"],a:2,e:"<strong>Abicado</strong> significa que a embarcação tem <strong>muito peso na proa</strong> e pouco na popa — a proa afunda mais que a popa."},
+{c:"Manobra",q:"Quando dizemos que o hélice está girando no sentido horário em marcha avante, a água é jogada para:",o:["Para as bochechas","Para trás","Para bombordo e boreste","Para frente"],a:1,e:"Em marcha avante, o hélice empurra a água para <strong>trás (ré)</strong>, gerando propulsão para frente."},
 
-// SEGURANÇA E EQUIPAMENTOS
-{c:"Segurança",q:"Quais são os equipamentos de salvatagem obrigatórios a bordo de uma embarcação de recreio?",o:["Apenas coletes salva-vidas","Coletes salva-vidas, boias salva-vidas, sinalizadores e espelho de sinalização","Coletes salva-vidas, âncora e extintores","Apenas extintor e colete"],a:1,e:"Os <strong>equipamentos obrigatórios</strong> incluem: coletes salva-vidas (um por pessoa), boias salva-vidas, sinalizadores visuais de socorro, extintores de incêndio, âncora com grimpa, entre outros conforme a NORMAM-03/DPC."},
-{c:"Segurança",q:"Quantos coletes salva-vidas devem estar a bordo?",o:["Apenas um, para emergências","Um para cada pessoa a bordo","Dois por pessoa","Um para cada dois passageiros"],a:1,e:"Deve haver <strong>um colete salva-vidas para cada pessoa a bordo</strong>, em boas condições de uso e de tamanho adequado para cada tripulante/passageiro."},
-{c:"Segurança",q:"O extintor de incêndio mais indicado para combater incêndio em motores a gasolina a bordo é:",o:["Extintor de água","Extintor de CO₂ (gás carbônico)","Extintor de espuma","Extintor de pó químico seco (PQS)"],a:3,e:"O <strong>extintor de pó químico seco (PQS)</strong> é o mais indicado para embarcações, especialmente para incêndios em motores a gasolina (classe B). O CO₂ também é aceito. Extintores de água NÃO devem ser usados em incêndios elétricos ou de combustível."},
-{c:"Segurança",q:"O que fazer ao perceber cheiro de combustível no porão da embarcação antes de ligar o motor?",o:["Ligar o motor rapidamente para afastar a embarcação do local","Ventilar o porão por pelo menos 4 minutos antes de ligar qualquer equipamento elétrico","Abrir o compartimento e jogar água para diluir o combustível","Ligar o rádio VHF para pedir ajuda"],a:1,e:"Vapores de combustível no porão são extremamente perigosos. <strong>Ventile o porão por pelo menos 4 minutos</strong> antes de ligar qualquer equipamento. Uma faísca pode causar explosão. Use o exaustor elétrico (se existir) ANTES de ligar o motor."},
-{c:"Segurança",q:"Qual o sinal de socorro internacional que pode ser feito com os braços?",o:["Acenar com um braço para cima","Estender os dois braços horizontalmente e abaixá-los repetidamente","Cruzar os braços acima da cabeça repetidamente","Apontar para o céu com os dois braços"],a:1,e:"O sinal de socorro com os braços consiste em <strong>estender os braços horizontalmente e abaixá-los lentamente e repetidamente</strong>. É o sinal universal de socorro reconhecido pelo RIPEAM."},
-{c:"Segurança",q:"A temperatura acima da qual o combustível desprende gases inflamáveis em quantidade suficiente para entrar em combustão é chamada de:",o:["Ponto de fulgor","Ponto de ebulição","Temperatura de ignição","Temperatura crítica"],a:0,e:"O <strong>ponto de fulgor</strong> é a temperatura mínima na qual o combustível desprende vapores em quantidade suficiente para serem inflamados por uma fonte de calor. A gasolina tem ponto de fulgor muito baixo, tornando-a altamente perigosa."},
+// ── SEGURANÇA E EQUIPAMENTOS ──────────────────────────────────────────────────
+{c:"Segurança",q:"Quantos coletes salva-vidas devem estar a bordo?",o:["Apenas um para emergências","Um para cada pessoa a bordo","Dois por pessoa","Um para cada dois passageiros"],a:1,e:"Obrigatoriamente <strong>um colete salva-vidas para cada pessoa a bordo</strong>, em boas condições e tamanho adequado."},
+{c:"Segurança",q:"Quanto à dotação de boias salva-vidas, embarcações miúdas devem:",o:["Dotar uma boia salva-vidas do tipo circular ou ferradura","Estão dispensadas de boias salva-vidas","As de médio porte estão dispensadas","Usar somente boias com iluminação automática"],a:0,e:"As <strong>embarcações miúdas</strong> devem dotar <strong>uma boia salva-vidas</strong> do tipo circular ou ferradura."},
+{c:"Segurança",q:"O que fazer ao perceber cheiro de combustível no porão antes de ligar o motor?",o:["Ligar o motor rapidamente e afastar a embarcação","Ventilar o porão por pelo menos 4 minutos antes de ligar qualquer equipamento","Jogar água para diluir o combustível","Ligar o rádio VHF para pedir ajuda"],a:1,e:"Vapores de combustível são explosivos. <strong>Ventile o porão por pelo menos 4 minutos</strong> antes de ligar qualquer equipamento elétrico ou o motor."},
+{c:"Segurança",q:"O sinal de socorro feito com os braços consiste em:",o:["Acenar com um braço","Estender os dois braços horizontalmente e abaixá-los repetidamente","Cruzar os braços acima da cabeça","Apontar para o céu com os dois braços"],a:1,e:"O sinal universal de socorro com braços: <strong>estender os dois braços horizontalmente e abaixá-los lentamente, de forma repetida</strong>."},
+{c:"Segurança",q:"A melhor maneira de saltar na água usando colete salva-vidas é:",o:["Mão direita no nariz e pés separados","Pés juntos e perna dobrada","Apenas mão direita no nariz","Pernas esticadas e pés juntos"],a:3,e:"O salto correto com colete é com <strong>pernas esticadas e pés juntos</strong>, mantendo o colete firme com as mãos se necessário."},
+{c:"Segurança",q:"Os meios rebocados pelo mar para prática esportiva sem propulsão própria são chamados de:",o:["Embarcações classificadas","Embarcações auxiliares","Dispositivos flutuantes","Embarcações de sobrevivência"],a:2,e:"Pranchas de surfe, esqui aquático e similares são <strong>dispositivos flutuantes</strong> — não têm propulsão e são rebocados."},
+{c:"Segurança",q:"Somente poderão navegar à noite as embarcações que possuírem luzes de navegação de acordo com:",o:["Código Internacional de Sinais","Convenção SOLAS","RIPEAM","Convenção STCW"],a:2,e:"As luzes de navegação obrigatórias seguem o disposto no <strong>RIPEAM</strong>."},
+{c:"Segurança",q:"Qual a potência mínima exigida para o transceptor VHF obrigatório em iates?",o:["25 W","15 W","10 W","110 W"],a:0,e:"O transceptor VHF obrigatório em iates deve ter potência mínima de <strong>25 W</strong>."},
+{c:"Segurança",q:"Qual o principal fator que MENOS contribui para acidentes em embarcações de recreio?",o:["Manutenção deficiente","Condutor ingerindo álcool","Embarcação conduzida por inabilitado","Ocorrência de nevoeiro na região que será navegada"],a:3,e:"O <strong>nevoeiro</strong> é uma condição externa que menos depende da ação do condutor. Os maiores fatores de acidentes são: álcool, inabilitação, manutenção deficiente e excesso de velocidade."},
+{c:"Segurança",q:"Deveremos ter muita cautela ou NÃO nos fazer ao mar se soubermos da chegada de uma frente:",o:["Quente","Fria","Mista","Oclusa"],a:1,e:"A passagem de uma <strong>frente fria</strong> é o evento meteorológico mais perigoso para embarcações pequenas, trazendo ventos fortes, ondas altas e tempestades rápidas."},
+{c:"Segurança",q:"Quando dizemos que o vento é 'nordeste', significa que ele:",o:["Vai para o norte","Vai para a direção nordeste","Vem da direção nordeste","Vem do norte e do leste simultaneamente"],a:2,e:"O nome do vento indica a <strong>direção de onde ele vem</strong>. Vento nordeste = vem do nordeste."},
 
-// PRIMEIROS SOCORROS
-{c:"Primeiros Socorros",q:"Um tripulante cai ao mar e está consciente. Qual a primeira ação?",o:["Mergulhar para salvá-lo","Lançar imediatamente uma boia salva-vidas ou qualquer objeto flutuante e nunca perder de vista a vítima","Acionar o motor em ré para recuar até a vítima","Gritar por socorro e aguardar ajuda externa"],a:1,e:"A primeira ação é <strong>lançar uma boia salva-vidas ou objeto flutuante</strong> para a vítima e <strong>jamais perder a vítima de vista</strong>. Designar alguém para observá-la continuamente. Depois, manobrar a embarcação para resgatar."},
-{c:"Primeiros Socorros",q:"Como posicionar uma pessoa afogada resgatada que está inconsciente e não respira?",o:["De barriga para cima para facilitar a respiração","De lado (posição lateral de segurança) e iniciar RCP se não houver pulso","Sentada para facilitar a drenagem de água","De barriga para baixo para drenar a água dos pulmões"],a:1,e:"Após o resgate, se inconsciente e sem respiração, coloque a vítima <strong>em superfície firme, de barriga para cima</strong>, e inicie a <strong>RCP (Ressuscitação Cardiopulmonar)</strong> — 30 compressões para cada 2 respirações. Não perca tempo tentando drenar água."},
-{c:"Primeiros Socorros",q:"Em caso de suspeita de hipotermia a bordo, o que NÃO se deve fazer?",o:["Remover roupas molhadas","Aquecer a vítima com cobertores","Dar bebidas alcoólicas para aquecer","Proteger do vento"],a:2,e:"Nunca se deve dar <strong>bebidas alcoólicas</strong> a uma vítima de hipotermia — o álcool dilata os vasos periféricos e aumenta a perda de calor. As ações corretas são: remover roupas molhadas, aquecer com cobertores e proteger do vento."},
-{c:"Primeiros Socorros",q:"Qual o procedimento correto na RCP para adultos (ressuscitação cardiopulmonar)?",o:["15 compressões para 1 respiração","30 compressões para 2 respirações","10 compressões para 3 respirações","5 compressões para 1 respiração"],a:1,e:"A <strong>RCP para adultos</strong> segue o protocolo de <strong>30 compressões torácicas para 2 respirações de resgate</strong>, em ciclos contínuos até o retorno da respiração espontânea ou chegada de socorro especializado."},
+// ── COMUNICAÇÕES ──────────────────────────────────────────────────────────────
+{c:"Comunicações",q:"Qual o canal VHF de chamada e socorro no mar?",o:["Canal 16","Canal 22","Canal 68","Canal 6"],a:0,e:"O <strong>Canal 16 VHF</strong> é o canal internacional de chamada, segurança e socorro — deve ser monitorado continuamente."},
+{c:"Comunicações",q:"Quais as frequências de socorro que devem ser monitoradas no VHF marítimo?",o:["Canal 16, Canal 68, Canal 69","Canal 16, Canal 69, Canal 77","Canal 06, Canal 08, Canal 16","Canal 68, Canal 69, Canal 77"],a:2,e:"As frequências obrigatórias de guarda são os <strong>Canais 06, 08 e 16</strong>. O Canal 16 é o principal canal de socorro."},
+{c:"Comunicações",q:"A palavra 'MAYDAY' é usada em qual situação?",o:["Urgência — pessoa doente","Segurança — aviso de tempo perigoso","Socorro — perigo imediato e grave de vida","Chamada rotineira de porto"],a:2,e:"<strong>MAYDAY</strong> = <strong>socorro</strong> — perigo imediato e grave à vida. Repetir três vezes. PAN-PAN = urgência. SÉCURITÉ = segurança/aviso."},
+{c:"Comunicações",q:"A palavra 'PAN-PAN' no rádio indica:",o:["Sinal de socorro imediato","Situação de urgência (pessoa doente, avaria séria sem perigo imediato)","Aviso meteorológico","Pedido de práticagem"],a:1,e:"<strong>PAN-PAN</strong> indica <strong>urgência</strong> — situação séria que requer assistência mas sem perigo imediato de vida."},
+{c:"Comunicações",q:"O canal VHF 22 é reservado para comunicação com:",o:["Outras embarcações de recreio","Capitania dos Portos e autoridades marítimas brasileiras","Comunicação porto a porto","Aeronaves de busca e salvamento"],a:1,e:"No Brasil, o <strong>Canal 22 VHF</strong> é reservado para comunicação com a <strong>Capitania dos Portos</strong> e autoridades marítimas."},
 
-// COMUNICAÇÕES
-{c:"Comunicações",q:"Qual o canal VHF de chamada e socorro no mar?",o:["Canal 16","Canal 22","Canal 68","Canal 6"],a:0,e:"O <strong>Canal 16 VHF</strong> é o canal internacional de chamada, segurança e socorro. Toda embarcação com rádio VHF deve monitorá-lo continuamente. Após o contato inicial, as partes combinam outro canal para comunicação."},
-{c:"Comunicações",q:"A palavra 'MAYDAY' é usada em qual situação?",o:["Urgência — pessoa doente a bordo","Segurança — aviso de tempo perigoso","Socorro — perigo imediato e grave de vida","Chamada rotineira de porto"],a:2,e:"<strong>MAYDAY</strong> é o sinal de <strong>socorro</strong>, usado quando há perigo imediato e grave à vida ou à embarcação. MAYDAY deve ser repetido três vezes. PAN-PAN é urgência. SÉCURITÉ é segurança/aviso de navegação."},
-{c:"Comunicações",q:"A palavra 'PAN-PAN' no rádio indica:",o:["Sinal de socorro imediato","Situação de urgência (pessoa doente, avaria séria sem perigo imediato)","Aviso meteorológico","Pedido de práticagem"],a:1,e:"<strong>PAN-PAN</strong> indica <strong>urgência</strong> — situação séria que requer assistência, mas sem perigo imediato de vida (como pessoa doente a bordo ou avaria grave). É menos urgente que MAYDAY."},
-{c:"Comunicações",q:"O canal VHF 22 é reservado para comunicação com:",o:["Outras embarcações de recreio","A Capitania dos Portos e autoridades marítimas brasileiras","Comunicação de porto para porto","Comunicação com aeronaves de busca e salvamento"],a:1,e:"No Brasil, o <strong>Canal 22 VHF</strong> é reservado para comunicação com a <strong>Capitania dos Portos</strong> e demais autoridades marítimas brasileiras."},
+// ── PRIMEIROS SOCORROS ────────────────────────────────────────────────────────
+{c:"Primeiros Socorros",q:"Um tripulante cai ao mar e está consciente. Qual a primeira ação?",o:["Mergulhar imediatamente para salvá-lo","Lançar boia salva-vidas ou objeto flutuante e nunca perder a vítima de vista","Acionar motor em ré para recuar","Gritar por socorro e aguardar"],a:1,e:"Primeiro: <strong>lançar boia ou objeto flutuante</strong> e designar alguém para <strong>nunca perder a vítima de vista</strong>. Depois manobrar a embarcação para o resgate."},
+{c:"Primeiros Socorros",q:"Após resgatar afogado inconsciente sem respiração, qual o procedimento correto?",o:["Deitar de barriga para cima para respirar melhor e dar bebidas quentes","Deitar de lado, fazer respiração boca a boca e iniciar RCP se necessário","Deitar de barriga para baixo para drenar água dos pulmões","Sentá-lo para facilitar a drenagem"],a:1,e:"Afogado inconsciente: <strong>deitar de costas</strong>, verificar via aérea, iniciar <strong>RCP</strong> se não houver respiração. Nunca perca tempo tentando drenar água."},
+{c:"Primeiros Socorros",q:"Em caso de hipotermia a bordo, o que NÃO fazer?",o:["Remover roupas molhadas","Aquecer com cobertores","Dar bebidas alcoólicas para aquecer","Proteger do vento"],a:2,e:"<strong>Nunca dar álcool</strong> a vítima de hipotermia — dilata vasos periféricos e aumenta perda de calor. Remova roupas molhadas, aqueça e proteja do vento."},
+{c:"Primeiros Socorros",q:"O protocolo correto de RCP para adultos é:",o:["15 compressões para 1 respiração","30 compressões para 2 respirações","10 compressões para 3 respirações","5 compressões para 1 respiração"],a:1,e:"A <strong>RCP</strong> segue o protocolo <strong>30 compressões para 2 respirações</strong>, em ciclos contínuos."},
+{c:"Primeiros Socorros",q:"Antes de realizar respiração boca a boca, deve-se verificar:",o:["Se existem corpos estranhos na boca da vítima","Se a vítima está lúcida e orientada","Se a vítima está com o coração batendo","Se a vítima tem pulso fraco"],a:0,e:"Antes de realizar a respiração boca a boca, verifique se há <strong>corpos estranhos na boca</strong> da vítima que possam obstruir a via aérea."},
+{c:"Primeiros Socorros",q:"Havendo revezamento na balsa salva-vidas, para conforto de quem está na água:",o:["Os da água devem empurrar a balsa","Trocar roupas para os da balsa ficarem sempre secos","Os da água devem pescar","A água da chuva deve ser consumida primeiro"],a:3,e:"Na balsa, <strong>a água da chuva deve ser consumida antes da água do mar</strong>. O consumo de água do mar é proibido — piora a desidratação."},
 
-// MARÉS E NAVEGAÇÃO
-{c:"Marés e Navegação",q:"O que é 'baixa-mar'?",o:["O horário de maior agitação das ondas","O momento em que o nível da maré atinge o ponto mais baixo","O período entre duas marés altas","A maré durante tempestade"],a:1,e:"<strong>Baixa-mar (BM)</strong> é o momento em que o nível da maré está no seu ponto mais baixo. <strong>Preamar (PM)</strong> é o ponto mais alto. O ciclo completo (PM → BM → PM) dura aproximadamente 12h25min."},
-{c:"Marés e Navegação",q:"Qual instrumento indica a profundidade da água sob a embarcação?",o:["Barômetro","Ecossonda (sonar)","Clinômetro","Anemômetro"],a:1,e:"A <strong>ecossonda</strong> (depth sounder / sonar) mede a profundidade da água sob a embarcação emitindo pulsos sonoros e calculando o tempo de retorno do eco. É instrumento fundamental para navegar com segurança."},
-{c:"Marés e Navegação",q:"O que é 'arraiamento' numa carta náutica?",o:["A linha que representa a costa","A linha de mínima profundidade navegável","A linha que une pontos de igual profundidade (isobatimétrica)","O símbolo de perigo submerso"],a:2,e:"As <strong>linhas isobatimétricas</strong> (ou isóbatas) são linhas que unem pontos de <strong>igual profundidade</strong> na carta náutica, equivalentes às curvas de nível nos mapas terrestres."},
-{c:"Marés e Navegação",q:"O que é a agulha magnética (bússola)?",o:["Instrumento que mede a velocidade do vento","Instrumento que aponta para o Norte magnético e serve para determinar rumos","Instrumento para medir a profundidade","Instrumento de comunicação"],a:1,e:"A <strong>agulha magnética (bússola)</strong> é o instrumento fundamental de navegação que aponta para o <strong>Norte magnético</strong>, permitindo ao navegante determinar e seguir rumos. Atenção: o Norte magnético difere do Norte verdadeiro pela <strong>declinação magnética</strong>."},
+// ── COMBATE A INCÊNDIO ────────────────────────────────────────────────────────
+{c:"Combate a Incêndio",q:"Quais são os três elementos do triângulo do fogo?",o:["Combustível, oxigênio e faísca","Combustível, calor e comburente (oxigênio)","Calor, pressão e combustível","Combustível, vento e umidade"],a:1,e:"O <strong>triângulo do fogo</strong>: <strong>combustível + calor + comburente (oxigênio)</strong>. Retirar qualquer um apaga o fogo."},
+{c:"Combate a Incêndio",q:"Os agentes extintores da classe A são recomendados para incêndios em:",o:["Líquidos inflamáveis","Materiais elétricos","Metais combustíveis","Materiais sólidos inflamáveis"],a:3,e:"Extintores <strong>Classe A</strong>: materiais <strong>sólidos inflamáveis</strong> (madeira, papel, tecido). Classe B: líquidos. Classe C: elétrico."},
+{c:"Combate a Incêndio",q:"O extintor de CO₂ é adequado para incêndios de:",o:["Madeira e papel (classe A)","Materiais elétricos e líquidos inflamáveis (classes C e B)","Apenas metais combustíveis","Apenas motores a diesel"],a:1,e:"O extintor de <strong>CO₂</strong> é indicado para incêndios <strong>elétricos (C)</strong> e de <strong>líquidos inflamáveis (B)</strong>. Não deixa resíduo e não conduz eletricidade."},
+{c:"Combate a Incêndio",q:"Para usar o extintor de espuma, deve-se:",o:["Abrir a válvula de acionamento","Apertar o gatilho e direcionar sobre os líquidos inflamáveis","Virar o extintor com a tampa para baixo e dirigir sobre a base das chamas","Retirar o pino e direcionar sobre equipamentos elétricos"],a:2,e:"O extintor de <strong>espuma</strong>: virar com a <strong>tampa para baixo</strong> e dirigir o jato sobre a <strong>base das chamas</strong>. Usado para líquidos inflamáveis."},
+{c:"Combate a Incêndio",q:"Os extintores portáteis devem estar localizados em:",o:["Paióis de materiais, atrás de equipamentos pesados","Locais de fácil acesso e próximos a áreas de risco de incêndio","Áreas protegidas e de acesso restrito","Locais fechados e seguros"],a:1,e:"Extintores devem estar em <strong>locais de fácil acesso</strong> e próximos a <strong>áreas de risco</strong>, para uso imediato."},
+{c:"Combate a Incêndio",q:"Em ambientes fechados e de pequeno volume, qual agente extintor pode causar sufocação?",o:["Pó químico","Água","Espuma química","Gás carbônico (CO₂)"],a:3,e:"O <strong>CO₂</strong> substitui o oxigênio do ambiente. Em espaços fechados e pequenos, pode causar <strong>sufocação</strong>. Use com ventilação adequada ou espaço aberto."},
+{c:"Combate a Incêndio",q:"O ponto de combustão é:",o:["A temperatura em que o combustível evapora","A temperatura acima da qual o combustível desprende gases que continuam queimando mesmo sem fonte externa","A temperatura de ignição do ar","O ponto em que a chama se apaga"],a:1,e:"O <strong>ponto de combustão</strong> é a temperatura acima da qual o combustível desprende gases inflamáveis que <strong>continuam queimando</strong> mesmo após retirada a fonte de calor externa (diferente do ponto de fulgor)."},
+{c:"Combate a Incêndio",q:"É comum ter incêndio a bordo por material elétrico mal especificado, como:",o:["Disjuntores com dupla finalidade","Cabos elétricos antichama","Disjuntores bem dimensionados","Disjuntores que provocam grandes centelhas"],a:3,e:"<strong>Disjuntores que provocam grandes centelhas</strong> ao abrir/fechar o circuito são causa frequente de incêndio a bordo — especialmente na presença de vapores de combustível."},
 
-// LEGISLAÇÃO
-{c:"Legislação",q:"O que é a NORMAM?",o:["Norma da Marinha para regulamentar embarcações de pesca profissional","Norma da Autoridade Marítima — conjunto de normas que regulamentam a atividade aquaviária no Brasil","Norma internacional de sinalização marítima","Regulamento de segurança de portos civis"],a:1,e:"<strong>NORMAM</strong> (Norma da Autoridade Marítima) é o conjunto de normas emitidas pela Marinha do Brasil que regulamenta diversas atividades aquaviárias, como habilitação de amadores (NORMAM-03), sinalização náutica (NORMAM-17), entre outras."},
-{c:"Legislação",q:"Uma embarcação apreendida pela autoridade marítima deve ser recolhida a:",o:["Local determinado pelo proprietário","Local determinado pela autoridade marítima (Capitania dos Portos)","O porto mais próximo","A marina de origem"],a:1,e:"Uma embarcação apreendida deve ser recolhida a <strong>local determinado pela Autoridade Marítima</strong> (Capitania dos Portos, Delegacia ou Agência Fluvial), ficando sob custódia até resolução legal."},
-{c:"Legislação",q:"O Arrais Amador está habilitado a conduzir embarcações em qual área de navegação?",o:["Mar aberto costeiro, até 20 milhas da costa","Navegação interior (rios, lagos, lagoas e mar territorial próximo à costa)","Qualquer área, exceto oceânica","Somente em rios"],a:1,e:"O <strong>Arrais Amador</strong> está habilitado para <strong>navegação interior</strong> — rios, lagos, lagoas e canais, bem como em mar territorial em águas abrigadas (até 3 milhas da costa, dependendo da NORMAM). Para mar aberto costeiro, é necessário o título de <strong>Mestre Amador</strong>."},
-{c:"Legislação",q:"Qual a validade da Carteira de Habilitação de Amador (CHA)?",o:["5 anos","Vitalícia","10 anos","3 anos"],a:2,e:"A <strong>Carteira de Habilitação de Amador (CHA)</strong> tem validade de <strong>10 anos</strong>, podendo ser renovada mediante os requisitos estabelecidos pela Marinha do Brasil."},
-{c:"Legislação",q:"É obrigatório o uso de colete salva-vidas por passageiros em embarcações de recreio?",o:["Apenas para crianças menores de 12 anos","Apenas quando solicitado pela capitania","Não, é opcional","Sim, deve haver um colete para cada pessoa a bordo"],a:3,e:"Sim, é <strong>obrigatório</strong> haver um <strong>colete salva-vidas para cada pessoa a bordo</strong>, em boas condições e tamanho adequado. Em determinadas situações (mar agitado, crianças), o uso deve ser imediato."},
+// ── ESTABILIDADE ──────────────────────────────────────────────────────────────
+{c:"Estabilidade",q:"O que ocorre quando carga pesada é colocada em posição elevada?",o:["A estabilidade aumenta","A estabilidade diminui — o centro de gravidade sobe","Não há alteração","A embarcação fica mais rápida"],a:1,e:"Peso em posição elevada <strong>sobe o centro de gravidade</strong>, reduzindo a estabilidade e aumentando risco de tombamento. Cargas pesadas devem ficar <strong>baixas e centralizadas</strong>."},
+{c:"Estabilidade",q:"Se os tanques estão com volume pela metade e há água no porão, a estabilidade sofre efeito de:",o:["Borda livre","Acréscimo da estabilidade","Superfície livre","Peso livre"],a:2,e:"O <strong>efeito de superfície livre</strong> ocorre quando há líquidos com espaço para se movimentar dentro da embarcação (tanques parcialmente cheios, água no porão), reduzindo a estabilidade."},
+{c:"Estabilidade",q:"Os movimentos de 'balanço', 'caturro' e 'cabeceio' são:",o:["Balanço: lateral; Caturro: proa-popa; Cabeceio: rotação vertical","Balanço: longitudinal; Caturro: lateral; Cabeceio: vertical","Balanço: rotação; Caturro: lateral; Cabeceio: longitudinal","São sinônimos"],a:0,e:"<strong>Balanço</strong>: lateral (bordo a bordo). <strong>Caturro</strong>: proa-popa. <strong>Cabeceio (jogo)</strong>: rotação em torno do eixo vertical."},
+{c:"Estabilidade",q:"O centro de gravidade (G) de uma embarcação é:",o:["Onde atua o empuxo (força de flutuação)","Onde age a resultante de todas as forças gravitacionais (peso)","O centro geométrico do casco","O ponto de maior resistência estrutural"],a:1,e:"O <strong>centro de gravidade (G)</strong> é onde age a <strong>resultante de todas as forças gravitacionais</strong>. Quanto mais baixo, maior a estabilidade."},
 
-// INCÊNDIO
-{c:"Combate a Incêndio",q:"Quais são os três elementos do triângulo do fogo?",o:["Combustível, oxigênio e faísca","Combustível, calor e comburente (oxigênio)","Calor, pressão e combustível","Combustível, vento e umidade"],a:1,e:"O <strong>triângulo do fogo</strong> é composto por três elementos: <strong>combustível</strong> (material que queima), <strong>calor</strong> (temperatura de ignição) e <strong>comburente</strong> (geralmente oxigênio). Retirar qualquer um desses elementos apaga o fogo."},
-{c:"Combate a Incêndio",q:"Em caso de incêndio a bordo, qual deve ser a primeira providência?",o:["Ligar imediatamente o motor e afastar a embarcação do local","Cortar o combustível, usar o extintor e acionar socorro (MAYDAY)","Jogar água do mar sobre o fogo","Abandonar imediatamente a embarcação"],a:1,e:"A primeira providência é <strong>cortar o fornecimento de combustível</strong>, em seguida usar o extintor adequado e acionar socorro via rádio (MAYDAY Canal 16). Abandone a embarcação apenas como último recurso."},
-{c:"Combate a Incêndio",q:"O extintor de CO₂ é adequado para incêndios:",o:["Em madeira e tecidos (classe A)","Elétricos e de líquidos inflamáveis (classes B e C)","Apenas de metais combustíveis","Apenas em motores a diesel"],a:1,e:"O <strong>extintor de CO₂</strong> é indicado para incêndios <strong>elétricos (classe C)</strong> e de <strong>líquidos inflamáveis (classe B)</strong>. Não deixa resíduo e não conduz eletricidade. Para madeira e papel (classe A), usar água ou PQS."},
+// ── LEGISLAÇÃO ────────────────────────────────────────────────────────────────
+{c:"Legislação",q:"Segundo a LESTA, a Autoridade Marítima no Brasil é:",o:["Ministério dos Transportes","Marinha do Brasil","Diretoria de Portos e Costas","Capitania dos Portos"],a:1,e:"Segundo a Lei Federal 9.537/97 (LESTA), a <strong>Autoridade Marítima no Brasil é a Marinha do Brasil</strong>."},
+{c:"Legislação",q:"O tripulante responsável pela operação e manutenção da embarcação em segurança é chamado de:",o:["Armador","Chefe de segurança","Comandante","Imediato"],a:2,e:"O <strong>Comandante</strong> é o tripulante legalmente responsável pela operação segura da embarcação, pela carga e por todas as pessoas a bordo."},
+{c:"Legislação",q:"Todas as pessoas a bordo estão sujeitas à autoridade do:",o:["Patrão","Proprietário","Polícia local","Comandante"],a:3,e:"A bordo, todas as pessoas estão sujeitas à autoridade do <strong>Comandante</strong>, que tem plena responsabilidade legal pela embarcação."},
+{c:"Legislação",q:"A pena de suspensão da habilitação não poderá ser superior a:",o:["3 meses","12 meses","6 meses","24 meses"],a:1,e:"A pena de <strong>suspensão da habilitação</strong> náutica não pode ser superior a <strong>12 meses</strong>."},
+{c:"Legislação",q:"A reincidência, para agravamento de pena, é a repetição da infração em período igual ou inferior a:",o:["Um mês","Nove meses","Seis meses","Doze meses"],a:3,e:"A <strong>reincidência</strong> é a repetição da mesma infração em período igual ou inferior a <strong>12 meses</strong>."},
+{c:"Legislação",q:"Uma embarcação com comprimento inferior a 24 metros que não é embarcação miúda é chamada de:",o:["Embarcação de uso restrito","Iate","Embarcação de esporte e recreio","Embarcação de médio porte"],a:3,e:"Uma embarcação <strong>inferior a 24 metros</strong> que não se enquadra como embarcação miúda é classificada como <strong>embarcação de médio porte</strong>."},
+{c:"Legislação",q:"A embarcação apreendida deve ser recolhida a:",o:["Local determinado pelo proprietário","Local determinado pela Autoridade Marítima","O porto mais próximo","A marina de origem"],a:1,e:"Embarcação apreendida é recolhida a <strong>local determinado pela Autoridade Marítima</strong> (Capitania dos Portos)."},
+{c:"Legislação",q:"Qual a validade da Carteira de Habilitação de Amador (CHA)?",o:["5 anos","Vitalícia","10 anos","3 anos"],a:2,e:"A <strong>CHA</strong> tem validade de <strong>10 anos</strong>."},
+{c:"Legislação",q:"O Arrais Amador está habilitado a navegar em:",o:["Mar aberto costeiro até 20 milhas","Navegação interior e águas abrigadas","Qualquer área exceto oceânica","Somente em rios"],a:1,e:"O <strong>Arrais Amador</strong> navega em <strong>navegação interior</strong> (rios, lagos, lagoas) e águas costeiras abrigadas. Para mar aberto costeiro é necessário o título de <strong>Mestre Amador</strong>."},
+{c:"Legislação",q:"Manter a disciplina a bordo de uma embarcação em movimento é responsabilidade do:",o:["Passageiros","Imediato","Capitão/Comandante","Proprietário"],a:2,e:"Manter a disciplina e a segurança a bordo é responsabilidade do <strong>Comandante (Capitão)</strong>."},
 
-// ESTABILIDADE
-{c:"Estabilidade",q:"O que é 'centro de gravidade' de uma embarcação?",o:["O ponto onde atua o empuxo (força de flutuação)","O ponto onde age a resultante de todas as forças gravitacionais (peso)","O centro geométrico do casco","O ponto de maior resistência estrutural"],a:1,e:"O <strong>centro de gravidade (G)</strong> é o ponto onde age a <strong>resultante de todas as forças gravitacionais</strong> (peso total da embarcação + carga). Quanto mais baixo o G, maior a estabilidade."},
-{c:"Estabilidade",q:"O que ocorre com a estabilidade de uma embarcação quando carga pesada é colocada em posição elevada (no topo)?",o:["A estabilidade aumenta","A estabilidade diminui — o centro de gravidade sobe","Não há alteração de estabilidade","A embarcação fica mais rápida mas menos estável lateralmente"],a:1,e:"Colocar peso em posição elevada <strong>sobe o centro de gravidade</strong>, reduzindo a estabilidade da embarcação e aumentando o risco de tombamento. Sempre posicione cargas pesadas o mais baixo e centralizado possível."},
-{c:"Estabilidade",q:"O que são os movimentos de 'balanço', 'caturro' e 'cabeceio'?",o:["Balanço: movimento lateral; Caturro: para cima e para baixo na proa-popa; Cabeceio: rotação em torno do eixo vertical","Balanço: movimento longitudinal; Caturro: rotação lateral; Cabeceio: para cima e para baixo","Balanço: rotação; Caturro: lateral; Cabeceio: longitudinal","São sinônimos para o mesmo tipo de movimento"],a:0,e:"<strong>Balanço</strong>: movimento de oscilação lateral (de bordo a bordo). <strong>Caturro</strong>: movimento de proa-popa (para cima e para baixo alternadamente). <strong>Cabeceio</strong> (ou jogo): rotação em torno do eixo vertical. São os três movimentos básicos das embarcações."}
+// ── MARÉS E NAVEGAÇÃO ──────────────────────────────────────────────────────────
+{c:"Marés e Navegação",q:"O que é 'baixa-mar'?",o:["O horário de maior agitação das ondas","O momento em que o nível da maré atinge o ponto mais baixo","O período entre duas marés altas","Maré durante tempestade"],a:1,e:"<strong>Baixa-mar (BM)</strong> = nível mais baixo da maré. <strong>Preamar (PM)</strong> = nível mais alto. O ciclo completo dura aprox. 12h25min."},
+{c:"Marés e Navegação",q:"Qual instrumento indica a profundidade da água sob a embarcação?",o:["Barômetro","Ecossonda (sonar)","Clinômetro","Anemômetro"],a:1,e:"A <strong>ecossonda</strong> mede a profundidade emitindo pulsos sonoros e calculando o tempo do eco."},
+{c:"Marés e Navegação",q:"O que a agulha magnética (bússola) indica?",o:["Velocidade do vento","Norte magnético, para determinar rumos","Profundidade da água","Distância percorrida"],a:1,e:"A <strong>agulha magnética</strong> aponta para o <strong>Norte magnético</strong>, permitindo determinar rumos. Atenção: Norte magnético ≠ Norte verdadeiro (há declinação magnética)."},
+{c:"Marés e Navegação",q:"As linhas que unem pontos de igual profundidade na carta náutica chamam-se:",o:["Isobáricas","Isotérmicas","Isobatimétricas (isóbatas)","Isogônicas"],a:2,e:"As <strong>isobatimétricas (isóbatas)</strong> unem pontos de <strong>igual profundidade</strong> — equivalentes às curvas de nível nos mapas terrestres."},
+{c:"Marés e Navegação",q:"O que é a NORMAM?",o:["Norma para pesca profissional","Norma da Autoridade Marítima — conjunto de normas que regulamentam a atividade aquaviária no Brasil","Norma internacional de sinalização","Regulamento de segurança de portos civis"],a:1,e:"<strong>NORMAM</strong> (Norma da Autoridade Marítima) é o conjunto de normas emitidas pela Marinha do Brasil regulamentando atividades aquaviárias."}
 ];
 
+var EXAM_SIZE=40;
 var cat="All",fq=[],sq=[],cur=0,score=0,total=0,done=false;
-var cats=["Todos","RIPEAM","Balizamento","Manobra","Segurança","Primeiros Socorros","Comunicações","Marés e Navegação","Legislação","Combate a Incêndio","Estabilidade"];
+var cats=["Todos","RIPEAM","Balizamento","Manobra","Segurança","Comunicações","Primeiros Socorros","Combate a Incêndio","Estabilidade","Legislação","Marés e Navegação"];
 
 function shufl(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
 
 function buildCats(){
   var bar=document.getElementById("cbar");bar.innerHTML="";
-  var disp=cat==="All"?"Todos":cat;
   cats.forEach(function(c){
     var key=c==="Todos"?"All":c;
     var has=key==="All"||Q.some(function(x){return x.c===key;});
     if(!has)return;
     var btn=document.createElement("button");
     btn.className="cbt"+(cat===key?" on":"");
-    btn.textContent=c;
+    btn.textContent=c+(key==="All"?" ("+EXAM_SIZE+" aleatórias)":"");
     btn.onclick=function(){cat=key;restart();};
     bar.appendChild(btn);
   });
 }
 
 function init(){
-  fq=cat==="All"?Q.slice():Q.filter(function(x){return x.c===cat;});
-  sq=shufl(fq);cur=0;score=0;total=0;done=false;
+  var pool=cat==="All"?Q.slice():Q.filter(function(x){return x.c===cat;});
+  var shuffled=shufl(pool);
+  sq=cat==="All"?shuffled.slice(0,EXAM_SIZE):shuffled;
+  cur=0;score=0;total=0;done=false;
   document.getElementById("rs").style.display="none";
   document.getElementById("qa").style.display="block";
   upd();render();
@@ -243,8 +256,7 @@ function render(){
   if(cur>=sq.length){showRes();return;}
   done=false;
   var q=sq[cur];
-  var qm=document.getElementById("qm");
-  qm.innerHTML="<span>Q "+(cur+1)+" / "+sq.length+"</span> <span>·</span> <span class='qtag'>"+q.c+"</span>";
+  document.getElementById("qm").innerHTML="<span>Q "+(cur+1)+" / "+sq.length+"</span> <span>·</span> <span class='qtag'>"+q.c+"</span>";
   document.getElementById("qt").textContent=q.q;
   var op=document.getElementById("op");op.innerHTML="";
   var L=["A","B","C","D"];
@@ -277,12 +289,11 @@ function check(ch,ans,exp){
   var ex=document.getElementById("ex");
   ex.innerHTML=(ch===ans?"<strong style='color:#22c55e'>Correto!</strong> ":"<strong style='color:#ef4444'>Incorreto.</strong> ")+exp;
   ex.className="expl on";
-  var ac=document.getElementById("ac");
   var nb=document.createElement("button");
   nb.className="btn primary";
   nb.textContent=cur+1<sq.length?"Próxima →":"Ver resultado";
   nb.onclick=function(){cur++;render();};
-  ac.appendChild(nb);
+  document.getElementById("ac").appendChild(nb);
 }
 
 function upd(){
@@ -296,21 +307,20 @@ function showRes(){
   document.getElementById("qa").style.display="none";
   var rs=document.getElementById("rs");rs.style.display="block";
   var pct=Math.round(score/sq.length*100);
-  var isAll=cat==="All";
   var passed=pct>=50;
   var rsc=document.getElementById("rsc");
   rsc.textContent=score+" / "+sq.length;
   rsc.className="result-score "+(passed?"pass":"fail");
-  document.getElementById("rl").textContent=passed?"Aprovado! ⚓":"Ainda não — continue estudando.";
-  document.getElementById("rp").textContent=isAll?"Prova real: mínimo 20/40 (50%). Você obteve "+score+"/"+sq.length+".":pct+"% em '"+cat+"'.";
+  document.getElementById("rl").textContent=passed?"Aprovado! ⚓":"Não aprovado — continue estudando!";
+  document.getElementById("rp").textContent="Prova real: mínimo 20/40 (50%). Você obteve "+score+"/"+sq.length+" ("+pct+"%).";
   var rt=document.getElementById("rt"),rb=document.getElementById("rb");
   if(!passed){
     rt.style.display="block";rt.className="result-tip warn";
-    rt.textContent="Dica: use os filtros por tema para revisar os assuntos em que errou. RIPEAM e Balizamento são os mais cobrados na prova da Marinha!";
+    rt.textContent="Dica: use os filtros por tema para revisar os assuntos em que errou. RIPEAM e Balizamento são os temas mais cobrados na prova da Marinha! Cada vez que fizer o simulado geral, as 40 questões são diferentes.";
     rb.style.display="none";
   } else {
     rt.style.display="none";rb.style.display="block";
-    rb.textContent="Bom resultado! Para a prova real, revise as normas oficiais da Marinha (NORMAM-03, RIPEAM-72) e pratique nos simulados da Capitania dos Portos.";
+    rb.textContent="Bom resultado! Para a prova real, revise as normas oficiais (NORMAM-03, RIPEAM-72, R-LESTA) e pratique mais simulados. Boa sorte na Capitania dos Portos! ⚓";
   }
   document.getElementById("pf").style.width="100%";
 }
